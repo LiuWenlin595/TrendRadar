@@ -1270,7 +1270,9 @@ def _format_rss_item_line(
             item_line += f" <font color='grey'>- {friendly_time}</font>"
     elif format_type == "telegram":
         if url:
-            item_line = f"  {index}. {title} ({url})"
+            from trendradar.report.helpers import html_escape
+            escaped_title = html_escape(title)
+            item_line = f"  {index}. <a href=\"{url}\">{escaped_title}</a>"
         else:
             item_line = f"  {index}. {title}"
         if friendly_time:
@@ -1566,7 +1568,9 @@ def _format_standalone_platform_item(item: Dict, index: int, format_type: str, r
 
     elif format_type == "telegram":
         if url:
-            item_line = f"  {index}. {title} ({url})"
+            from trendradar.report.helpers import html_escape
+            escaped_title = html_escape(title)
+            item_line = f"  {index}. <a href=\"{url}\">{escaped_title}</a>"
         else:
             item_line = f"  {index}. {title}"
         if rank_display:
@@ -1647,7 +1651,9 @@ def _format_standalone_rss_item(
             item_line += f" <font color='grey'>- {meta_str}</font>"
     elif format_type == "telegram":
         if url:
-            item_line = f"  {index}. {title} ({url})"
+            from trendradar.report.helpers import html_escape
+            escaped_title = html_escape(title)
+            item_line = f"  {index}. <a href=\"{url}\">{escaped_title}</a>"
         else:
             item_line = f"  {index}. {title}"
         if meta_str:

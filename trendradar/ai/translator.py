@@ -3,7 +3,7 @@
 AI 翻译器模块
 
 对推送内容进行多语言翻译
-基于 LiteLLM 统一接口，支持 100+ AI 提供商
+基于自定义 LLM API（curl 调用）
 """
 
 import json
@@ -41,7 +41,7 @@ class AITranslator:
 
         Args:
             translation_config: AI 翻译配置 (AI_TRANSLATION)
-            ai_config: AI 模型配置（LiteLLM 格式）
+            ai_config: AI 模型配置
         """
         self.translation_config = translation_config
         self.ai_config = ai_config
@@ -50,7 +50,7 @@ class AITranslator:
         self.enabled = translation_config.get("ENABLED", False)
         self.target_language = translation_config.get("LANGUAGE", "English")
 
-        # 创建 AI 客户端（基于 LiteLLM）
+        # 创建 AI 客户端（基于自定义 LLM）
         self.client = AIClient(ai_config)
 
         # 加载提示词模板
@@ -286,7 +286,7 @@ class AITranslator:
         return translated[:expected_count]
 
     def _call_ai(self, user_prompt: str) -> str:
-        """调用 AI API（使用 LiteLLM）"""
+        """调用 AI API（使用自定义 LLM）"""
         messages = []
         if self.system_prompt:
             messages.append({"role": "system", "content": self.system_prompt})

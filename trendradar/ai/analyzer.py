@@ -3,7 +3,7 @@
 AI 分析器模块
 
 调用 AI 大模型对热点新闻进行深度分析
-基于 LiteLLM 统一接口，支持 100+ AI 提供商
+基于自定义 LLM API（curl 调用）
 """
 
 import json
@@ -52,7 +52,7 @@ class AIAnalyzer:
         初始化 AI 分析器
 
         Args:
-            ai_config: AI 模型配置（LiteLLM 格式）
+            ai_config: AI 模型配置
             analysis_config: AI 分析功能配置（language, prompt_file 等）
             get_time_func: 获取当前时间的函数
             debug: 是否开启调试模式
@@ -62,7 +62,7 @@ class AIAnalyzer:
         self.get_time_func = get_time_func
         self.debug = debug
 
-        # 创建 AI 客户端（基于 LiteLLM）
+        # 创建 AI 客户端（基于自定义 LLM）
         self.client = AIClient(ai_config)
 
         # 验证配置
@@ -205,7 +205,7 @@ class AIAnalyzer:
             print(user_prompt)
             print("=" * 80 + "\n")
 
-        # 调用 AI API（使用 LiteLLM）
+        # 调用 AI API（使用自定义 LLM）
         try:
             response = self._call_ai(user_prompt)
             result = self._parse_response(response)
@@ -355,7 +355,7 @@ class AIAnalyzer:
         return news_content, rss_content, hotlist_total, rss_total, total_count
 
     def _call_ai(self, user_prompt: str) -> str:
-        """调用 AI API（使用 LiteLLM）"""
+        """调用 AI API（使用自定义 LLM）"""
         messages = []
         if self.system_prompt:
             messages.append({"role": "system", "content": self.system_prompt})
