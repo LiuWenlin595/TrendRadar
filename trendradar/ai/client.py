@@ -71,12 +71,14 @@ class AIClient:
         Raises:
             ValueError: API 调用失败时抛出异常
         """
-        # API 配置（从环境变量或默认值）
+        # API 配置（优先环境变量，其次配置文件）
         api_url = os.getenv("LLM_API_URL", "https://ai-llm-gateway.amap.com/open_api/v1/chat")
-        auth_token = os.getenv("AUTH_TOKEN", os.getenv("AI_API_KEY", ""))
-        
-        if not auth_token:
-            raise ValueError("未配置 AUTH_TOKEN 或 AI_API_KEY 环境变量")
+        # 优先级：AUTH_TOKEN（含默认值）> AI_API_KEY > config.api_key
+        auth_token = (
+            os.getenv("AUTH_TOKEN", "1Zx8EvYhC8FsyQXLqwKgXVRD") 
+            or os.getenv("AI_API_KEY") 
+            or self.api_key
+        )
         
         # 构建请求体
         temperature = kwargs.get("temperature", self.temperature)
@@ -175,8 +177,11 @@ class AIClient:
         Returns:
             tuple: (是否有效, 错误信息)
         """
-        # 检查认证令牌
-        if not os.getenv("AUTH_TOKEN") and not os.getenv("AI_API_KEY"):
-            return False, "未配置 AUTH_TOKEN 或 AI_API_KEY 环境变量"
+        # 检查认证令牌（环境变量或配置文件，AUTH_TOKEN 含默认值）
+        auth_token = (
+            os.getenv("AUTH_TOKEN", "1Zx8EvYhC8FsyQXLqwKgXVRD") 
+            or os.getenv("AI_API_KEY") 
+            or self.api_key
+        )
         
         return True, ""

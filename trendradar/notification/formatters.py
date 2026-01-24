@@ -28,7 +28,7 @@ def strip_markdown(text: str) -> str:
     # 去除删除线 ~~text~~
     text = re.sub(r'~~(.+?)~~', r'\1', text)
 
-    # 转换链接 [text](url) -> text url（保留 URL）
+    # 转换链接 [text](url) -> text url（保留标题和 URL）
     text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'\1 \2', text)
 
     # 去除图片 ![alt](url) -> alt
